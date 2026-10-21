@@ -6,7 +6,7 @@ Learners can lose track of where they left off across multiple active / in-progr
 
 ## MVP scope
 
-The MVP serves seeded learner progress from an in-memory API and presents in-progress courses in the Angular UI. The view shows completion percentage, last activity, deadline urgency, and stale status, with loading, error, retry, and empty states based on the API responses. A learner dropdown lets the user switch among seeded learner IDs 1, 2, and 3.
+The MVP serves seeded learner progress from an in-memory API and presents in-progress courses in the Angular UI. The view shows completion percentage, last activity, deadline urgency, and stale status, with loading, error, retry, and empty states based on the API responses. A learner dropdown lets the user switch among seeded learner IDs 1, 2, and 3. As an optional engineering-quality check, a GitHub Actions workflow runs backend tests and builds plus the Angular build on pushes and pull requests.
 
 ## Extra business rule
 
