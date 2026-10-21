@@ -29,6 +29,15 @@ export class App implements OnInit {
       .subscribe((body) => {
         this.courses = body.courses;
         this.state = 'loaded';
+
+        // For analytics purposes.
+        console.info('learning_analytics', {
+          event: 'course_progress_viewed',
+          learnerId: this.learnerId,
+          courseCount: body.courses.length,
+          occurredAt: new Date().toISOString()
+        });
+
       }, () => {
         this.state = 'error';
       });
