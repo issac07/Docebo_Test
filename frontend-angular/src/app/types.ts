@@ -3,6 +3,7 @@ export type CourseProgress = {
   title: string;
   completionPercentage: number;
   lastActivityAt: string;
+  deadlineUrgency: string;
   status: string;
   isStale?: boolean;
 };

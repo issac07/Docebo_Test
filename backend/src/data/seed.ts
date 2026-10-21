@@ -105,8 +105,45 @@ export const enrollments: CourseEnrollment[] = [
     status: 'completed',
     deadlineAt: daysAgo(5)
   },
+  {
+    courseId: 'course-privacy',
+    title: 'Data Privacy Fundamentals',
+    learnerId: 3,
+    lessons: [
+      { id: 'l1', title: 'GDPR basics', completed: true },
+      { id: 'l2', title: 'Handling PII', completed: true },
+    ],
+    lastActivityAt: daysAgo(106),
+    status: 'in_progress',
+    deadlineAt: daysFromNow(5)
+  },
+  {
+    courseId: 'course-compliance',
+    title: 'Annual Compliance Refresh',
+    learnerId: 3,
+    lessons: [
+      { id: 'l1', title: 'Policy overview', completed: true },
+      { id: 'l2', title: 'Quiz', completed: false },
+    ],
+    lastActivityAt: daysAgo(54), // always > STALE_DAYS (30)
+    status: 'in_progress',
+    deadlineAt: daysAgo(2)
+  },
+  {
+    courseId: 'course-completed-sample',
+    title: 'Completed Course (should not appear in API)',
+    learnerId: 3,
+    lessons: [
+      { id: 'l1', title: 'Done', completed: true },
+      { id: 'l2', title: 'Also done', completed: true },
+    ],
+    lastActivityAt: daysAgo(84),
+    status: 'completed',
+    deadlineAt: daysFromNow(15)
+  }
 ];
 
 export const knownLearnerIds = new Set(
   enrollments.map((enrollment) => enrollment.learnerId),
 );
+  

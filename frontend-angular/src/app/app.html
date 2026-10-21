@@ -1,13 +1,58 @@
 <main class="page">
   <p class="eyebrow">Docebo · pilot</p>
-  <h1>My progress</h1>
-  <p class="lede">In-progress courses for learner {{ learnerId }}.</p>
-  @if (courses) {
+  <div class="page-header">
+    <div class="page-heading">
+      <h1>My progress</h1>
+      <p class="lede">In-progress courses for learner {{ learnerId }}.</p>
+    </div>
+    <div class="learner-picker">
+      <label for="learner-select">Choose learner</label>
+      <select id="learner-select" [value]="learnerId" (change)="onLearnerChange($event)">
+        @for (id of availableLearnerIds; track id) {
+          <option [value]="id">Learner {{ id }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  @if (state === 'loading') {
+    <p class="request-state" role="status">Loading your course progress...</p>
+  }
+  @else if (state === 'error') {
+    <section class="request-state error-state" role="alert">
+      <p>We couldn't load your course progress. Check your connection and try again.</p>
+      <button type="button" (click)="loadCourses()">Retry</button>
+    </section>
+  }
+  @else if (state === 'loaded' && courses.length === 0) {
+    <p class="request-state" role="status">You have no in-progress courses right now.</p>
+  }
+  @else {
     <ul class="course-list">
       @for (course of courses; track course.courseId) {
-        <li class="course">
-          <h2>{{ course.title }}</h2>
-          <p class="meta">{{ course.completionPercentage }}% · {{ course.lastActivityAt }}</p>
+        <li
+          class="course"
+          [class.course-overdue]="course.deadlineUrgency === 'overdue'"
+          [class.course-due-soon]="course.deadlineUrgency === 'due_soon'"
+          [class.course-on-track]="course.deadlineUrgency === 'on_track'"
+          [class.course-no-deadline]="course.deadlineUrgency === 'no_deadline'">
+          <div class="course-heading">
+            <h2>{{ course.title }}</h2>
+            <span class="urgency-badge" [class.urgency-overdue]="course.deadlineUrgency === 'overdue'"
+              [class.urgency-due-soon]="course.deadlineUrgency === 'due_soon'"
+              [class.urgency-on-track]="course.deadlineUrgency === 'on_track'"
+              [class.urgency-no-deadline]="course.deadlineUrgency === 'no_deadline'">
+              @switch (course.deadlineUrgency) {
+                @case ('overdue') { Overdue }
+                @case ('due_soon') { Due within 7 days }
+                @case ('on_track') { On track }
+                @case ('no_deadline') { No deadline }
+              }
+            </span>
+          </div>
+          <p class="course-meta-inline">
+            <span><strong>Completion:</strong> {{ course.completionPercentage }}%</span>
+            <span><strong>Last activity:</strong> {{ course.lastActivityAt }}</span>
+          </p>
           @if (course.isStale) {
             <span class="badge">Inactive</span>
           }
