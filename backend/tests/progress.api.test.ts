@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { enrollments } from '../src/data/seed';
+import { getDeadlineUrgency } from '../src/services/progressService';
 
 describe('GET /health', () => {
   it('returns ok', async () => {
@@ -97,5 +98,36 @@ describe('GET /api/learners/:learnerId/progress', () => {
     expect(res.status).toBe(200);
     expect(res.body.courses).toHaveLength(1);
     expect(res.body.courses[0].courseId).toBe('course-safety');
+  });
+
+  it('includes deadline and urgency for each course', async () => {
+    const res = await request(app).get('/api/learners/1/progress');
+    const urgencyByCourseId = Object.fromEntries(
+      res.body.courses.map((course: { courseId: string; deadlineUrgency: string }) => [
+        course.courseId,
+        course.deadlineUrgency,
+      ]),
+    );
+
+    expect(urgencyByCourseId).toMatchObject({
+      'course-onboarding': 'due_soon',
+      'course-leadership': 'on_track',
+      'course-compliance': 'overdue',
+    });
+  });
+});
+
+describe('getDeadlineUrgency', () => {
+  const now = new Date('2026-10-21T12:00:00.000Z');
+
+  it('classifies past, due-soon, on-track, and missing deadlines', () => {
+    expect(getDeadlineUrgency('2026-10-21T11:59:59.999Z', now)).toBe('overdue');
+    expect(getDeadlineUrgency('2026-10-21T12:00:00.000Z', now)).toBe('due_soon');
+    expect(getDeadlineUrgency(null, now)).toBe('no_deadline');
+  });
+
+  it('includes the exact seven-day boundary in due soon', () => {
+    expect(getDeadlineUrgency('2026-10-28T12:00:00.000Z', now)).toBe('due_soon');
+    expect(getDeadlineUrgency('2026-10-28T12:00:00.001Z', now)).toBe('on_track');
   });
 });

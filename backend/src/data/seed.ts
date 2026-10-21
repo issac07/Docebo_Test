@@ -12,6 +12,12 @@ function daysAgo(days: number): string {
   return date.toISOString();
 }
 
+function daysFromNow(days: number): string {
+  const date = new Date();
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString();
+}
+
 export const enrollments: CourseEnrollment[] = [
   {
     courseId: 'course-onboarding',
@@ -25,6 +31,7 @@ export const enrollments: CourseEnrollment[] = [
     ],
     lastActivityAt: daysAgo(4),
     status: 'in_progress',
+    deadlineAt: daysFromNow(5)
   },
   {
     courseId: 'course-leadership',
@@ -37,6 +44,7 @@ export const enrollments: CourseEnrollment[] = [
     ],
     lastActivityAt: daysAgo(2),
     status: 'in_progress',
+    deadlineAt: daysFromNow(20)
   },
   {
     courseId: 'course-compliance',
@@ -48,6 +56,7 @@ export const enrollments: CourseEnrollment[] = [
     ],
     lastActivityAt: daysAgo(54), // always > STALE_DAYS (30)
     status: 'in_progress',
+    deadlineAt: daysAgo(2)
   },
   {
     courseId: 'course-completed-sample',
@@ -59,6 +68,7 @@ export const enrollments: CourseEnrollment[] = [
     ],
     lastActivityAt: daysAgo(84),
     status: 'completed',
+    deadlineAt: daysFromNow(5)
   },
   {
     courseId: 'course-not-started',
@@ -69,6 +79,7 @@ export const enrollments: CourseEnrollment[] = [
     ],
     lastActivityAt: daysAgo(23),
     status: 'not_started',
+    deadlineAt: daysFromNow(21)
   },
   {
     courseId: 'course-safety',
@@ -80,6 +91,7 @@ export const enrollments: CourseEnrollment[] = [
     ],
     lastActivityAt: daysAgo(3),
     status: 'in_progress',
+    deadlineAt: null
   },
   {
     courseId: 'course-privacy',
@@ -91,6 +103,7 @@ export const enrollments: CourseEnrollment[] = [
     ],
     lastActivityAt: daysAgo(106),
     status: 'completed',
+    deadlineAt: daysAgo(5)
   },
 ];
 

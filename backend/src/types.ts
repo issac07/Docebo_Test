@@ -1,5 +1,6 @@
 /** Enrollment status in seed data — not necessarily what the API returns. */
 export type EnrollmentStatus = 'not_started' | 'in_progress' | 'completed';
+export type DeadlineUrgency = 'overdue' | 'due_soon' | 'on_track' | 'no_deadline';
 
 export interface Lesson {
   id: string;
@@ -15,6 +16,8 @@ export interface CourseEnrollment {
   lessons: Lesson[];
   /** ISO-8601 timestamp of last learner activity on this course */
   lastActivityAt: string;
+  /** Optional ISO-8601 timestamp of the course deadline. */
+  deadlineAt?: string | null;
   status: EnrollmentStatus;
 }
 
@@ -24,6 +27,7 @@ export interface CourseProgress {
   title: string;
   completionPercentage: number;
   lastActivityAt: string;
+  deadlineUrgency: DeadlineUrgency;
   status: 'in_progress';
   /** Set when last activity is older than the stale threshold (see progressService). */
   isStale?: boolean;
